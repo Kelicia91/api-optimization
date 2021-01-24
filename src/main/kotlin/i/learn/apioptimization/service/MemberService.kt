@@ -22,6 +22,10 @@ class MemberService(
             .orElseThrow { NotFoundException(MessageKey.EXCEPTION) }
     }
 
+    fun get(): List<Member> {
+        return memberRepository.findAll()
+    }
+
     @Transactional
     fun update(id: Long, name: String): Long {
         val member = memberRepository.findById(id)

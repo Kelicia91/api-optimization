@@ -1,9 +1,6 @@
 package i.learn.apioptimization.controller
 
-import i.learn.apioptimization.controller.interfaces.CreateMemberRequest
-import i.learn.apioptimization.controller.interfaces.CreatedMemberResponse
-import i.learn.apioptimization.controller.interfaces.UpdateMemberRequest
-import i.learn.apioptimization.controller.interfaces.UpdatedMemberResponse
+import i.learn.apioptimization.controller.interfaces.*
 import i.learn.apioptimization.domain.Member
 import i.learn.apioptimization.service.MemberService
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,6 +21,14 @@ class MemberController(
         val member = memberService.add(Member.of(request))
         return ResponseEntity.created(URI.create("/members/${member.id}"))
                 .body(CreatedMemberResponse.of(member))
+    }
+
+    @GetMapping
+    fun get(): ResponseEntity<WrappedView<List<GetMemberResponse>>> {
+        val members = memberService.get()
+        return ResponseEntity.ok(
+            WrappedView.of(members.map { GetMemberResponse.of(it) })
+        )
     }
 
     @PutMapping("/{id}")

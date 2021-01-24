@@ -1,16 +1,12 @@
 package i.learn.apioptimization.controller
 
-import i.learn.apioptimization.controller.interfaces.CreateMemberRequest
-import i.learn.apioptimization.controller.interfaces.CreatedMemberResponse
-import i.learn.apioptimization.controller.interfaces.UpdateMemberRequest
-import i.learn.apioptimization.controller.interfaces.UpdatedMemberResponse
+import i.learn.apioptimization.controller.interfaces.*
 import i.learn.apioptimization.domain.Member
 import i.learn.apioptimization.exception.RestExceptionView
 import i.learn.apioptimization.repository.MemberRepository
 import i.learn.apioptimization.service.MessageSourceService
 import i.learn.apioptimization.support.MessageKey
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -82,5 +78,26 @@ class MemberControllerTest(
 
         assertEquals(response.statusCode, HttpStatus.NOT_FOUND)
         assertEquals(response.body?.message, messageSourceService.getMessage(MessageKey.NOT_FOUND_EXCEPTION))
+    }
+
+    @Test
+    fun get() {
+        val members = memberRepository.saveAll(listOf(
+            Member(name = "alice"),
+            Member(name = "bob")
+        ))
+
+        val response = restTemplate.exchange<WrappedView<List<GetMemberResponse>>>(
+            "/members",
+            HttpMethod.GET,
+            HttpEntity.EMPTY
+        )
+
+        assertEquals(response.statusCode, HttpStatus.OK)
+        assertNotNull(response.body?.data)
+        val data = response.body!!.data
+        assertTrue(members.size <= data.size)
+        assertNotNull(data.find { it.name == members[0].name })
+        assertNotNull(data.find { it.name == members[1].name })
     }
 }
