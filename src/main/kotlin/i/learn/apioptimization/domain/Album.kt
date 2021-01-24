@@ -5,7 +5,10 @@ import javax.persistence.Entity
 
 @Entity
 @DiscriminatorValue("A")
-data class Album(
+class Album(
+    name: String,
+    price: Int,
+    stockQuantity: Int,
     val artist: String? = null,
     val etc: String? = null
-): Item()
+): Item(name = name, price = price, stockQuantity = stockQuantity)

@@ -5,7 +5,10 @@ import javax.persistence.Entity
 
 @Entity
 @DiscriminatorValue("M")
-data class Movie(
+class Movie(
+    name: String,
+    price: Int,
+    stockQuantity: Int,
     val director: String? = null,
     val actor: String? = null
-): Item()
+): Item(name = name, price = price, stockQuantity = stockQuantity)

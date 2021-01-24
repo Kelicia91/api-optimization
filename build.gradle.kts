@@ -6,6 +6,11 @@ plugins {
 	kotlin("jvm") version "1.4.21"
 	kotlin("plugin.spring") version "1.4.21"
 	kotlin("plugin.jpa") version "1.4.21"
+	id("org.jetbrains.kotlin.plugin.allopen") version "1.4.21"
+}
+
+allOpen {
+	annotation("javax.persistence.Entity")
 }
 
 group = "i.learn"

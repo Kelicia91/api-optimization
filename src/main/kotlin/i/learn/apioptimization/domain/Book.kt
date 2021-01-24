@@ -5,7 +5,10 @@ import javax.persistence.Entity
 
 @Entity
 @DiscriminatorValue("B")
-data class Book(
+class Book(
+    name: String,
+    price: Int,
+    stockQuantity: Int,
     val author: String? = null,
     val isbn: String? = null
-): Item()
+): Item(name = name, price = price, stockQuantity = stockQuantity)
