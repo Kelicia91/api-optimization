@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class TestHelloController(
+class HelloControllerTest(
     @Autowired val restTemplate: TestRestTemplate
 ){
     @Test
