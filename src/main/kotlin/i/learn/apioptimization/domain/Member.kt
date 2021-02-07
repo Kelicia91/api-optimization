@@ -14,11 +14,11 @@ data class Member(
     var name: String = "",
 
     @Embedded
-    val address: Address? = null,
+    var address: Address? = null,
 
     // @note: 1:n <-> n:1 관계 설명을 위해 추가됨. 설계가 부적절하다고 생각할 필요x.
     @OneToMany(mappedBy = "member")
-    val orders: MutableList<Order> = mutableListOf()
+    var orders: MutableList<Order> = mutableListOf()
 ) {
     companion object {
         fun of(request: CreateMemberRequest): Member {
