@@ -24,10 +24,10 @@ class MemberController(
     }
 
     @GetMapping
-    fun get(): ResponseEntity<WrappedView<List<GetMemberResponse>>> {
+    fun get(): ResponseEntity<WrappedResponse<List<GetMemberResponse>>> {
         val members = memberService.get()
         return ResponseEntity.ok(
-            WrappedView.of(members.map { GetMemberResponse.of(it) })
+            WrappedResponse.of(members.map { GetMemberResponse.of(it) })
         )
     }
 
