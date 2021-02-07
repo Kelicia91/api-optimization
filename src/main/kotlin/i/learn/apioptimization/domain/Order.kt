@@ -1,5 +1,6 @@
 package i.learn.apioptimization.domain
 
+import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -12,20 +13,21 @@ data class Order(
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    var member: Member? = null,
+    @JoinColumn(name = "member_id", nullable = false)
+    var member: Member,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
-    val orderItems: MutableList<OrderItem> = mutableListOf(),
+    var orderItems: MutableList<OrderItem> = mutableListOf(),
 
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     var delivery: Delivery? = null,
 
-    val orderedAt: LocalDateTime? = null,
+    @CreationTimestamp
+    var orderedAt: LocalDateTime? = null,
 
     @Enumerated(EnumType.STRING)
-    var status: OrderStatus? = null
+    var status: OrderStatus = OrderStatus.ORDER
 ) {
     //==연관관계 메서드==//
     fun set(member: Member) {
