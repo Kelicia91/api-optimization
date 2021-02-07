@@ -92,7 +92,7 @@ class MemberControllerTest(
             Member(name = "bob")
         ))
 
-        val response = restTemplate.exchange<WrappedView<List<GetMemberResponse>>>(
+        val response = restTemplate.exchange<WrappedResponse<List<GetMemberResponse>>>(
             "/members",
             HttpMethod.GET,
             HttpEntity.EMPTY
