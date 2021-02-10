@@ -1,6 +1,5 @@
 package i.learn.apioptimization.controller
 
-import i.learn.apioptimization.InitDb
 import i.learn.apioptimization.controller.interfaces.*
 import i.learn.apioptimization.domain.Member
 import i.learn.apioptimization.exception.RestExceptionView
@@ -8,12 +7,10 @@ import i.learn.apioptimization.repository.MemberRepository
 import i.learn.apioptimization.service.MessageSourceService
 import i.learn.apioptimization.support.MessageKey
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
@@ -30,14 +27,6 @@ class MemberControllerTest(
 
     @Autowired
     lateinit var memberRepository: MemberRepository
-
-    @MockBean
-    lateinit var initDb: InitDb
-
-    @BeforeAll
-    fun beforeAll() {
-        memberRepository.deleteAll()
-    }
 
     @Test
     fun create() {

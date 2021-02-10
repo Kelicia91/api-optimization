@@ -1,76 +1,27 @@
 package i.learn.apioptimization.controller
 
-import i.learn.apioptimization.InitDb
 import i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse
 import i.learn.apioptimization.controller.interfaces.WrappedResponse
-import i.learn.apioptimization.domain.*
-import i.learn.apioptimization.repository.*
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
+typealias SimpleOrders = WrappedResponse<List<GetSimpleOrderResponse>>
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SimpleOrderControllerTest(
     @Autowired val restTemplate: TestRestTemplate
 ) {
-    @Autowired lateinit var memberRepository: MemberRepository
-    @Autowired lateinit var itemRepository: ItemRepository
-    @Autowired lateinit var orderRepository: OrderRepository
-
-    @MockBean lateinit var initDb: InitDb
-
-    private lateinit var orders: List<Order>
-
-    @BeforeAll
-    fun beforeAll() {
-        orderRepository.deleteAll()
-        itemRepository.deleteAll()
-        memberRepository.deleteAll()
-
-        val members = memberRepository.saveAll(listOf(
-            Member(name = "alice", address = Address(city = "서울", street = "1", zipcode = "123")),
-            Member(name = "bob", address = Address(city = "진주", street = "2", zipcode = "456"))
-        ))
-        val items = itemRepository.saveAll(listOf(
-            Book(name = "JPA1 BOOK", price = 10000, stockQuantity = 100),
-            Book(name = "JPA2 BOOK", price = 20000, stockQuantity = 200),
-            Book(name = "SPRING1 BOOK", price = 30000, stockQuantity = 300),
-            Book(name = "SPRING2 BOOK", price = 40000, stockQuantity = 400)
-        ))
-        orders = orderRepository.saveAll(listOf(
-            Order(
-                member = members[0],
-                delivery = Delivery(address = members[0].address),
-                orderItems = mutableListOf(
-                    OrderItem(item = items[0], orderPrice = 10000, count = 1),
-                    OrderItem(item = items[1], orderPrice = 10000, count = 2),
-                )
-            ),
-            Order(
-                member = members[1],
-                delivery = Delivery(address = members[1].address),
-                orderItems = mutableListOf(
-                    OrderItem(item = items[2], orderPrice = 10000, count = 3),
-                    OrderItem(item = items[3], orderPrice = 10000, count = 4),
-                )
-            ),
-        ))
-    } // beforeAll
-
     @Test
     fun getOrdersByLazyLoading() {
         // requires the setting 'open-in-view: true'
-        val response = restTemplate.exchange<WrappedResponse<List<GetSimpleOrderResponse>>>(
+        val response = restTemplate.exchange<SimpleOrders>(
             "/api/n-to-one/v2/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
@@ -79,7 +30,7 @@ class SimpleOrderControllerTest(
         assertEquals(response.statusCode, HttpStatus.OK)
         assertNotNull(response.body?.data)
         val data = response.body!!.data
-        assertTrue(orders.size <= data.size)
+        assertTrue(data.isNotEmpty())
 
         // @note: refer (*ToOne annotation in Order::class) and (GetSimpleOrderResponse::class)
         // cause N+1 query problem
@@ -125,7 +76,7 @@ class SimpleOrderControllerTest(
 
     @Test
     fun getOrdersByFetchJoin() {
-        val response = restTemplate.exchange<WrappedResponse<List<GetSimpleOrderResponse>>>(
+        val response = restTemplate.exchange<SimpleOrders>(
             "/api/n-to-one/v3/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
@@ -134,7 +85,7 @@ class SimpleOrderControllerTest(
         assertEquals(response.statusCode, HttpStatus.OK)
         assertNotNull(response.body?.data)
         val data = response.body!!.data
-        assertTrue(orders.size <= data.size)
+        assertTrue(data.isNotEmpty())
 
         // @note: refer (fetch join for JPA)
         // only 1 query be executed
@@ -169,7 +120,7 @@ class SimpleOrderControllerTest(
 
     @Test
     fun getOrdersByResponse() {
-        val response = restTemplate.exchange<WrappedResponse<List<GetSimpleOrderResponse>>>(
+        val response = restTemplate.exchange<SimpleOrders>(
             "/api/n-to-one/v4/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
@@ -178,7 +129,7 @@ class SimpleOrderControllerTest(
         assertEquals(response.statusCode, HttpStatus.OK)
         assertNotNull(response.body?.data)
         val data = response.body!!.data
-        assertTrue(orders.size <= data.size)
+        assertTrue(data.isNotEmpty())
 
         // @note: query exactly by api response specification
         // only 1 query be executed

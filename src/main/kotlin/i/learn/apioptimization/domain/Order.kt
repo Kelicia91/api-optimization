@@ -16,8 +16,8 @@ data class Order(
     @JoinColumn(name = "member_id", nullable = false)
     var member: Member,
 
-    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
-    var orderItems: MutableList<OrderItem> = mutableListOf(),
+    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL], targetEntity = OrderItem::class)
+    var orderItems: List<OrderItem> = listOf(),
 
     @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
@@ -33,11 +33,6 @@ data class Order(
     fun set(member: Member) {
         this.member = member
         member.orders.add(this)
-    }
-
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-        orderItem.order = this
     }
 
     fun set(delivery: Delivery) {
