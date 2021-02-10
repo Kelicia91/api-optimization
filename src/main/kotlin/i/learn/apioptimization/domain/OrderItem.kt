@@ -11,12 +11,12 @@ data class OrderItem(
     var id: Long? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
-    val item: Item? = null,
+    @JoinColumn(name = "item_id", nullable = false)
+    val item: Item,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    var order: Order? = null,
+    @JoinColumn(name = "order_id", nullable = false)
+    val order: Order,
 
     val orderPrice: Int = 0, //주문 가격
 

@@ -11,7 +11,7 @@ class Item(
     @Column(name = "item_id")
     var id: Long? = null,
 
-    val name: String? = null,
+    val name: String,
 
     val price: Int = 0,
 
