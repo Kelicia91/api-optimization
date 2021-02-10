@@ -69,6 +69,7 @@ class OrderControllerTest(
 
     @Test
     fun getOrdersByLazyLoading() {
+        // requires the setting 'open-in-view: true'
         val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
             "/api/v2/orders",
             HttpMethod.GET,
