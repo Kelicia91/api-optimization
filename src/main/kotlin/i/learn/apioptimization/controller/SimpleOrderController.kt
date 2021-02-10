@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api")
-class OrderController(
+@RequestMapping("/api/n-to-one")
+class SimpleOrderController(
     private val orderService: OrderService
 ) {
     @GetMapping("/v2/orders")

@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class OrderControllerTest(
+class SimpleOrderControllerTest(
     @Autowired val restTemplate: TestRestTemplate
 ) {
     @Autowired lateinit var memberRepository: MemberRepository
@@ -71,7 +71,7 @@ class OrderControllerTest(
     fun getOrdersByLazyLoading() {
         // requires the setting 'open-in-view: true'
         val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
-            "/api/v2/orders",
+            "/api/n-to-one/v2/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
         )
@@ -126,7 +126,7 @@ class OrderControllerTest(
     @Test
     fun getOrdersByFetchJoin() {
         val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
-            "/api/v3/orders",
+            "/api/n-to-one/v3/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
         )
@@ -170,7 +170,7 @@ class OrderControllerTest(
     @Test
     fun getOrdersByResponse() {
         val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
-            "/api/v4/orders",
+            "/api/n-to-one/v4/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
         )
