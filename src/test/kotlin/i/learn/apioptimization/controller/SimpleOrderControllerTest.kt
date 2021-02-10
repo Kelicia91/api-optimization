@@ -1,7 +1,5 @@
 package i.learn.apioptimization.controller
 
-import i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse
-import i.learn.apioptimization.controller.interfaces.WrappedResponse
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,8 +9,6 @@ import org.springframework.boot.test.web.client.exchange
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-
-typealias SimpleOrders = WrappedResponse<List<GetSimpleOrderResponse>>
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class SimpleOrderControllerTest(

@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
+typealias SimpleOrders = WrappedResponse<List<GetSimpleOrderResponse>>
+
 @RestController
 @RequestMapping("/api/n-to-one")
 class SimpleOrderController(
     private val orderService: OrderService
 ) {
     @GetMapping("/v2/orders")
-    fun getOrdersByLazyLoading(): ResponseEntity<WrappedResponse<List<GetSimpleOrderResponse>>> {
+    fun getOrdersByLazyLoading(): ResponseEntity<SimpleOrders> {
         val orders = orderService.getOrdersByFindAll()
         return ResponseEntity.ok(
             WrappedResponse.of(orders.map { GetSimpleOrderResponse.of(it) })
@@ -22,7 +24,7 @@ class SimpleOrderController(
     }
 
     @GetMapping("/v3/orders")
-    fun getOrdersByFetchJoin(): ResponseEntity<WrappedResponse<List<GetSimpleOrderResponse>>> {
+    fun getOrdersByFetchJoin(): ResponseEntity<SimpleOrders> {
         val orders = orderService.getOrdersByFetchJoin()
         return ResponseEntity.ok(
             WrappedResponse.of(orders.map { GetSimpleOrderResponse.of(it) })
@@ -30,7 +32,7 @@ class SimpleOrderController(
     }
 
     @GetMapping("/v4/orders")
-    fun getOrdersByResponse(): ResponseEntity<WrappedResponse<List<GetSimpleOrderResponse>>> {
+    fun getOrdersByResponse(): ResponseEntity<SimpleOrders> {
         val orderResponses = orderService.getOrderResponses()
         return ResponseEntity.ok(
             WrappedResponse.of(orderResponses)
