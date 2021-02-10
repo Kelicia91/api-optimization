@@ -1,6 +1,6 @@
 package i.learn.apioptimization.service
 
-import i.learn.apioptimization.controller.interfaces.GetOrderResponse
+import i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse
 import i.learn.apioptimization.domain.Order
 import i.learn.apioptimization.repository.OrderRepository
 import org.springframework.stereotype.Service
@@ -24,13 +24,14 @@ class OrderService(
         ).resultList
     }
 
-    fun getOrderResponses(): List<GetOrderResponse> {
+    fun getOrderResponses(): List<GetSimpleOrderResponse> {
+        // @note: string query 사용 하니까 rename class 해도 반영 안 되서 오류 난다!
         return em.createQuery(
-    "select new i.learn.apioptimization.controller.interfaces.GetOrderResponse(o.id, m.name, o.orderedAt, o.status, d.address)" +
+    "select new i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse(o.id, m.name, o.orderedAt, o.status, d.address)" +
             " from Order o" +
             " join o.member m" +
             " join o.delivery d"
-            , GetOrderResponse::class.java
+            , GetSimpleOrderResponse::class.java
         ).resultList
     }
 }

@@ -1,7 +1,7 @@
 package i.learn.apioptimization.controller
 
 import i.learn.apioptimization.InitDb
-import i.learn.apioptimization.controller.interfaces.GetOrderResponse
+import i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse
 import i.learn.apioptimization.controller.interfaces.WrappedResponse
 import i.learn.apioptimization.domain.*
 import i.learn.apioptimization.repository.*
@@ -70,7 +70,7 @@ class SimpleOrderControllerTest(
     @Test
     fun getOrdersByLazyLoading() {
         // requires the setting 'open-in-view: true'
-        val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
+        val response = restTemplate.exchange<WrappedResponse<List<GetSimpleOrderResponse>>>(
             "/api/n-to-one/v2/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
@@ -125,7 +125,7 @@ class SimpleOrderControllerTest(
 
     @Test
     fun getOrdersByFetchJoin() {
-        val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
+        val response = restTemplate.exchange<WrappedResponse<List<GetSimpleOrderResponse>>>(
             "/api/n-to-one/v3/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY
@@ -169,7 +169,7 @@ class SimpleOrderControllerTest(
 
     @Test
     fun getOrdersByResponse() {
-        val response = restTemplate.exchange<WrappedResponse<List<GetOrderResponse>>>(
+        val response = restTemplate.exchange<WrappedResponse<List<GetSimpleOrderResponse>>>(
             "/api/n-to-one/v4/orders",
             HttpMethod.GET,
             HttpEntity.EMPTY

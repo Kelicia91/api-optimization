@@ -1,6 +1,6 @@
 package i.learn.apioptimization.controller
 
-import i.learn.apioptimization.controller.interfaces.GetOrderResponse
+import i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse
 import i.learn.apioptimization.controller.interfaces.WrappedResponse
 import i.learn.apioptimization.service.OrderService
 import org.springframework.http.ResponseEntity
@@ -14,23 +14,23 @@ class SimpleOrderController(
     private val orderService: OrderService
 ) {
     @GetMapping("/v2/orders")
-    fun getOrdersByLazyLoading(): ResponseEntity<WrappedResponse<List<GetOrderResponse>>> {
+    fun getOrdersByLazyLoading(): ResponseEntity<WrappedResponse<List<GetSimpleOrderResponse>>> {
         val orders = orderService.getOrdersByFindAll()
         return ResponseEntity.ok(
-            WrappedResponse.of(orders.map { GetOrderResponse.of(it) })
+            WrappedResponse.of(orders.map { GetSimpleOrderResponse.of(it) })
         )
     }
 
     @GetMapping("/v3/orders")
-    fun getOrdersByFetchJoin(): ResponseEntity<WrappedResponse<List<GetOrderResponse>>> {
+    fun getOrdersByFetchJoin(): ResponseEntity<WrappedResponse<List<GetSimpleOrderResponse>>> {
         val orders = orderService.getOrdersByFetchJoin()
         return ResponseEntity.ok(
-            WrappedResponse.of(orders.map { GetOrderResponse.of(it) })
+            WrappedResponse.of(orders.map { GetSimpleOrderResponse.of(it) })
         )
     }
 
     @GetMapping("/v4/orders")
-    fun getOrdersByResponse(): ResponseEntity<WrappedResponse<List<GetOrderResponse>>> {
+    fun getOrdersByResponse(): ResponseEntity<WrappedResponse<List<GetSimpleOrderResponse>>> {
         val orderResponses = orderService.getOrderResponses()
         return ResponseEntity.ok(
             WrappedResponse.of(orderResponses)
