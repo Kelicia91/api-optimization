@@ -58,4 +58,16 @@ class OrderService(
 //        .setMaxResults(100)   // limit
         .resultList
     }
+
+    fun getOrdersByFetchJoin(offset: Int, limit: Int): List<Order> {
+        return em.createQuery(
+    "select o from Order o" +
+            " join fetch o.member m" +
+            " join fetch o.delivery d"
+            , Order::class.java
+        )
+        .setFirstResult(offset)
+        .setMaxResults(limit)
+        .resultList
+    }
 }
