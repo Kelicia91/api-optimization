@@ -20,4 +20,12 @@ class OrderController(
             WrappedResponse(orders.map(GetOrderResponse::of))
         )
     }
+
+    @GetMapping("/v3/orders")
+    fun getOrdersByCollectionFetchJoin(): ResponseEntity<WrappedResponse<List<GetOrderResponse>>> {
+        val orders = orderService.getOrdersByCollectionFetchJoin()
+        return ResponseEntity.ok(
+            WrappedResponse(orders.map(GetOrderResponse::of))
+        )
+    }
 }
