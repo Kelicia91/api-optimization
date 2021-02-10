@@ -81,7 +81,7 @@ class SimpleOrderControllerTest(
         val data = response.body!!.data
         assertTrue(orders.size <= data.size)
 
-        // @note: refer (*ToOne annotation in Order::class) and (GetOrderResponse::class)
+        // @note: refer (*ToOne annotation in Order::class) and (GetSimpleOrderResponse::class)
         // cause N+1 query problem
         // 1 = select from orders
         // N = select from member, delivery (by the num of orders)
