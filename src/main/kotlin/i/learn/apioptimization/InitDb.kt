@@ -42,8 +42,8 @@ class InitDb(
                     delivery = Delivery(address = members[0].address),
                 ).also {
                     it.orderItems = listOf(
-                        OrderItem(item = items[0], orderPrice = 10000, count = 1, order = it),
-                        OrderItem(item = items[1], orderPrice = 10000, count = 2, order = it),
+                        OrderItem(order = it, item = items[0], orderPrice = 10000, count = 1),
+                        OrderItem(order = it, item = items[1], orderPrice = 10000, count = 2),
                     )
                 },
                 Order(
@@ -51,8 +51,8 @@ class InitDb(
                     delivery = Delivery(address = members[1].address),
                 ).also {
                     it.orderItems = listOf(
-                        OrderItem(item = items[2], orderPrice = 10000, count = 3, order = it),
-                        OrderItem(item = items[3], orderPrice = 10000, count = 4, order = it),
+                        OrderItem(order = it, item = items[2], orderPrice = 10000, count = 3),
+                        OrderItem(order = it, item = items[3], orderPrice = 10000, count = 4),
                     )
                 }
             ))
