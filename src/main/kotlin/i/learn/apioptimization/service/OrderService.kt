@@ -53,6 +53,7 @@ class OrderService(
         )
 // @note: offset, limit 설정해도 db-query 반영 안됨
 // @warn: WARN 36019 --- [o-auto-1-exec-1] o.h.h.internal.ast.QueryTranslatorImpl   : HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
+// @warn: 페이징이 order가 아닌, orderItems 기준으로 된다(!)
 //        .setFirstResult(1)    // offset
 //        .setMaxResults(100)   // limit
         .resultList
