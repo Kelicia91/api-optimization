@@ -14,7 +14,7 @@ data class GetOrderResponse(
     val orderedAt: LocalDateTime,
     val orderStatus: OrderStatus,
     val deliveryAddress: Address?,
-    var orderItems: List<GetOrderItemResponse>
+    val orderItems: List<GetOrderItemResponse>
 ) {
     constructor(
         orderId: Long,

@@ -79,7 +79,14 @@ class OrderService(
             orderResponsesEmptyItem.map { it.orderId }
         )
         return orderResponsesEmptyItem.map {
-            it.apply { it.orderItems = orderItemResponsesById.getOrDefault(it.orderId, listOf()) }
+            GetOrderResponse(
+                orderId = it.orderId,
+                name = it.name,
+                orderedAt = it.orderedAt,
+                orderStatus = it.orderStatus,
+                deliveryAddress = it.deliveryAddress,
+                orderItems = orderItemResponsesById.getOrDefault(it.orderId, it.orderItems),
+            )
         }
     }
 
