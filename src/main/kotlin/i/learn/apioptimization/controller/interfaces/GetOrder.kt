@@ -14,8 +14,16 @@ data class GetOrderResponse(
     val orderedAt: LocalDateTime,
     val orderStatus: OrderStatus,
     val deliveryAddress: Address?,
-    val orderItems: List<GetOrderItemResponse>
+    var orderItems: List<GetOrderItemResponse>
 ) {
+    constructor(
+        orderId: Long,
+        name: String,
+        orderedAt: LocalDateTime,
+        orderStatus: OrderStatus,
+        deliveryAddress: Address?
+    ): this(orderId, name, orderedAt, orderStatus, deliveryAddress, listOf())
+
     companion object {
         fun of(order: Order): GetOrderResponse {
             return GetOrderResponse(
@@ -31,6 +39,7 @@ data class GetOrderResponse(
 }
 
 data class GetOrderItemResponse(
+    val orderId: Long,
     val name: String,
     val orderPrice: Int,
     val count: Int
@@ -38,6 +47,7 @@ data class GetOrderItemResponse(
     companion object {
         fun of(orderItem: OrderItem): GetOrderItemResponse {
             return GetOrderItemResponse(
+                orderId = orderItem.order.id ?: throw AppException(MessageKey.EXCEPTION),
                 name = orderItem.item.name,
                 orderPrice = orderItem.orderPrice,
                 count = orderItem.count

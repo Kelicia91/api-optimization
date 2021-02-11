@@ -42,4 +42,13 @@ class OrderController(
             WrappedResponse(orders.map(GetOrderResponse::of))
         )
     }
+
+    @GetMapping("/v4/orders")
+    fun getOrdersByResponse(
+        @RequestParam(value = "offset", defaultValue = "0") offset: Int,
+        @RequestParam(value = "limit", defaultValue = "100") limit: Int,
+    ): ResponseEntity<Orders> {
+        val orderViews = orderService.getOrderResponses(offset, limit)
+        return ResponseEntity.ok(WrappedResponse(orderViews))
+    }
 }

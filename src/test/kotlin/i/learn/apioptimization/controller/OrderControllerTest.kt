@@ -188,4 +188,60 @@ internal class OrderControllerTest(
             item0_.item_id in (?, ?, ?, ?)
         ***/
     }
+
+    @Test
+    fun getOrdersByResponse() {
+        val offset = 0
+        val limit = 100
+        val response = restTemplate.exchange<Orders>(
+            "/api/n-to-many/v4/orders?offset=${offset}&limit=${limit}",
+            HttpMethod.GET,
+            HttpEntity.EMPTY
+        )
+
+        assertEquals(response.statusCode, HttpStatus.OK)
+        assertNotNull(response.body?.data)
+        val data = response.body!!.data
+        assertTrue(data.isNotEmpty())
+        assertTrue(limit - offset >= data.size)
+        data.forEach { assertTrue(it.orderItems.isNotEmpty()) }
+
+        // @note: query exactly by api response specification
+        // only 2 queries be executed
+        // 1 = orders with member, delivery
+        // 1 = orderItems with items in (fk.order_id)
+
+        /*** order
+        select
+            order0_.order_id as col_0_0_,
+            member1_.name as col_1_0_,
+            order0_.ordered_at as col_2_0_,
+            order0_.status as col_3_0_,
+            delivery2_.city as col_4_0_,
+            delivery2_.street as col_4_1_,
+            delivery2_.zipcode as col_4_2_
+        from
+            orders order0_
+        inner join
+            member member1_
+                on order0_.member_id=member1_.member_id
+        inner join
+            delivery delivery2_
+                on order0_.delivery_id=delivery2_.delivery_id limit ?
+        ***/
+        /*** order_item
+        select
+            orderitem0_.order_id as col_0_0_,
+            item1_.name as col_1_0_,
+            orderitem0_.order_price as col_2_0_,
+            orderitem0_.count as col_3_0_
+        from
+            order_item orderitem0_
+        inner join
+            item item1_
+                on orderitem0_.item_id=item1_.item_id
+        where
+            orderitem0_.order_id in (?, ?)
+        ***/
+    }
 }

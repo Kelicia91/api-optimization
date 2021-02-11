@@ -1,5 +1,7 @@
 package i.learn.apioptimization.service
 
+import i.learn.apioptimization.controller.interfaces.GetOrderItemResponse
+import i.learn.apioptimization.controller.interfaces.GetOrderResponse
 import i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse
 import i.learn.apioptimization.domain.Order
 import i.learn.apioptimization.repository.OrderRepository
@@ -69,5 +71,41 @@ class OrderService(
         .setFirstResult(offset)
         .setMaxResults(limit)
         .resultList
+    }
+
+    fun getOrderResponses(offset: Int, limit: Int): List<GetOrderResponse> {
+        val orderResponsesEmptyItem = getOrderResponsesEmptyItem(offset, limit)
+        val orderItemResponsesById = getOrderItemResponsesByOrderId(
+            orderResponsesEmptyItem.map { it.orderId }
+        )
+        return orderResponsesEmptyItem.map {
+            it.apply { it.orderItems = orderItemResponsesById.getOrDefault(it.orderId, listOf()) }
+        }
+    }
+
+    private fun getOrderResponsesEmptyItem(offset: Int, limit: Int): List<GetOrderResponse> {
+        return em.createQuery(
+    "select new i.learn.apioptimization.controller.interfaces.GetOrderResponse(o.id, m.name, o.orderedAt, o.status, d.address)" +
+            " from Order o" +
+            " join o.member m" +
+            " join o.delivery d"
+            , GetOrderResponse::class.java
+        )
+        .setFirstResult(offset)
+        .setMaxResults(limit)
+        .resultList
+    }
+
+    private fun getOrderItemResponsesByOrderId(orderIds: List<Long>): Map<Long, List<GetOrderItemResponse>> {
+        val orderItemResponses = em.createQuery(
+    "select new i.learn.apioptimization.controller.interfaces.GetOrderItemResponse(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+            " from OrderItem oi" +
+            " join oi.item i" +
+            " where oi.order.id in :orderIds"
+            , GetOrderItemResponse::class.java
+        )
+        .setParameter("orderIds", orderIds)
+        .resultList
+        return orderItemResponses.groupBy { it.orderId }
     }
 }
