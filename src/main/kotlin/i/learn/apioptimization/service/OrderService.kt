@@ -24,7 +24,7 @@ class OrderService(
         ).resultList
     }
 
-    fun getOrderResponses(): List<GetSimpleOrderResponse> {
+    fun getSimpleOrderResponses(): List<GetSimpleOrderResponse> {
         // @note: string query 사용 하니까 rename class 해도 반영 안 되서 오류 난다!
         return em.createQuery(
     "select new i.learn.apioptimization.controller.interfaces.GetSimpleOrderResponse(o.id, m.name, o.orderedAt, o.status, d.address)" +

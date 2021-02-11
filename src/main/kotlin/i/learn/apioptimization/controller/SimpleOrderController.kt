@@ -33,7 +33,7 @@ class SimpleOrderController(
 
     @GetMapping("/v4/orders")
     fun getOrdersByResponse(): ResponseEntity<SimpleOrders> {
-        val orderResponses = orderService.getOrderResponses()
+        val orderResponses = orderService.getSimpleOrderResponses()
         return ResponseEntity.ok(
             WrappedResponse.of(orderResponses)
         )
